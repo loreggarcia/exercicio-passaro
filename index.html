@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+
+        scene: {
+          preload: preload,
+          create: create,
+          update: update,
+        },
+      };
+
+      var game = new Phaser.Game(config); //Phaser
+      var passarinho
+
+      function preload() {
+        this.load.image("bg", "../exercicio_passaro/assets/bg_space.png");
+        // exercicio_passaro\assets\bg_space.png
+        //C:\Users\Inteli\Desktop\AULA_COMPUTAÇÃO\exercicio_passaro\assets\bg_space.png
+        this.load.spritesheet(
+          "bird",
+          "../exercicio_passaro/assets/bird-green.png",
+          { frameWidth: 75, frameHeight: 75 }
+        );
+      }
+
+      function create() {
+        this.add.image(400, 300, "bg").setScale(1.2);
+        passarinho = this.add.sprite(100, 100, "bird").setScale(1.3); //guardar o variavel passaro
+
+        this.anims.create({
+          key: "fly",//nome dessa animação
+          frames: this.anims.generateFrameNumbers("bird", {
+            strart: 0,
+            end: 7,
+          }),
+          frameRate: 10,
+          repeat: -1, //-1 indica repetição contínua, 0 indica sem repetição, e um número positivo indica a quantidade de repetições
+        });
+        passarinho.anims.play("fly", true); //iniciar a animação configurada.
+      }
+
+      function update() {
+        if (passarinho.x === 100 && passarinho.y === 100) {
+          //Se o passarinho estiver no ponto inicial (100,100), iniciar ida
+          passarinho.setFlip(false, false);
+          passarinho.ida = true;
+        }
+        if (
+          passarinho.x < 500 &&
+          passarinho.y < 500 &&
+          passarinho.ida === true
+        ) {
+          //Se o passarinho não tiver chegado ainda no ponto final (500), andar mais para direita e baixo;
+          console.log("O que acontece?");
+          passarinho.x += 5;
+          passarinho.y += 5;
+        }
+        if (passarinho.x === 500 && passarinho.y === 500) {
+          //Se o passarinho chegar no ponto final (500,500), iniciar volta;
+          passarinho.setFlip(true, false);
+          passarinho.ida = false;
+        }
+        if (
+          passarinho.x > 100 &&
+          passarinho.y > 100 &&
+          passarinho.ida === false
+        ) {
+          //Se o passarinho não tiver chegado de volta ao ponto inicial, andar mais para esquerda e alto;
+          console.log("E o que acontece agora?");
+          passarinho.x -= 5;
+          passarinho.y -= 5;
+        }
+      }
+    </script>
+  </body>
+</html>
